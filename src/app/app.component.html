@@ -1,0 +1,172 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+        </li>
+      </ul>
+
+      <form
+        #searchForm="ngForm"
+        (ngSubmit)="gotToPage(searchForm.value.name)"
+        class="d-flex"
+        role="search"
+      >
+        <input
+          type="search"
+          name="name"
+          ngModel
+          class="form-control me-2"
+          placeholder="Search employees"
+          aria-label="Search"
+        />
+        <button class="btn btn-success" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>
+<div class="row">
+  <div class="col-md-12 mt-5">
+    <!-- <h3>Employee List</h3> -->
+    <div>
+      Show no.of Employees: 
+      <select
+        [(ngModel)]="selectedRecords"
+        (ngModelChange)="gotToPage(searchForm.value.name, 0, $event)"
+      >
+        <option *ngFor="let emp of employees">{{ emp }}</option>
+      </select>
+    </div>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th style="cursor: pointer;"
+            (click)="idSort('id')"
+            scope="col"
+          >
+            ID<i *ngIf="sortKeyword==='asc'" class="bi bi-arrow-down"></i>
+            <i *ngIf="sortKeyword==='desc'" class="bi bi-arrow-up"></i>
+          </th>
+          <th
+          (click)="idSort('id')"
+            scope="col"
+          >
+            NAME
+            <i *ngIf="sortKeyword==='asc'" class="bi bi-arrow-down"></i>
+            <i *ngIf="sortKeyword==='desc'" class="bi bi-arrow-up"></i>
+          </th>
+          <th
+          (click)="idSort('id')"
+            scope="col"
+          >
+            EMAIL
+            <i *ngIf="sortKeyword==='asc'" class="bi bi-arrow-down"></i>
+            <i *ngIf="sortKeyword==='desc'" class="bi bi-arrow-up"></i>
+          </th>
+          <th
+          (click)="idSort('id')"
+            scope="col"
+          >
+            MOBILE NUMBER
+            <i *ngIf="sortKeyword==='asc'" class="bi bi-arrow-down"></i>
+            <i *ngIf="sortKeyword==='desc'" class="bi bi-arrow-up"></i>
+          </th>
+          <th
+          (click)="idSort('id')"
+            scope="col"
+          >
+            DOMINE
+            <i *ngIf="sortKeyword==='asc'" class="bi bi-arrow-down"></i>
+            <i *ngIf="sortKeyword==='desc'" class="bi bi-arrow-up"></i>
+          </th>
+          <th
+          (click)="idSort('id')"
+            scope="col"
+          >
+            SALARY
+            <i *ngIf="sortKeyword==='asc'" class="bi bi-arrow-down"></i>
+            <i *ngIf="sortKeyword==='desc'" class="bi bi-arrow-up"></i>
+          </th>
+          <th
+          (click)="idSort('id')"
+            scope="col"
+          >
+            ADDRESS
+            <i *ngIf="sortKeyword==='asc'" class="bi bi-arrow-down"></i>
+            <i *ngIf="sortKeyword==='desc'" class="bi bi-arrow-up"></i>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of employee; let i = index">
+          <td scope="row">{{ user.id }}</td>
+          <td>{{ user.name }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.mobile_Number }}</td>
+          <td>{{ user.domine }}</td>
+          <td>{{ user.salary }}</td>
+          <td>{{ user.address }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="employee.length < 1" class="alert alert-secondary" role="alert">
+      No Employees found
+    </div>
+    <nav *ngIf="employee.length > 0" aria-label="Page navigation example">
+      <ul class="pagination justify-content-end">
+        <li
+          class="page-item pointer"
+          [ngClass]="0 == (currentPage$ | async) ? ' disabled' : ''"
+        >
+          <a
+            (click)="goToNextOrPreviousPage('backward', searchForm.value.name)"
+            class="page-link"
+            aria-label="Previous"
+          >
+            <span aria-hidden="true">&laquo; Previous</span>
+          </a>
+        </li>
+        <li
+          *ngFor="let pageNumber of [].constructor(totalPages); let i = index"
+          class="page-item pointer"
+          [ngClass]="i == (currentPage$ | async) ? ' active' : ''"
+        >
+          <a (click)="gotToPage(searchForm.value.name, i)" class="page-link">
+            {{ i + 1 }}
+          </a>
+        </li>
+        <li
+          class="page-item pointer"
+          [ngClass]="
+            totalPages - 1 == (currentPage$ | async) ? ' disabled' : ''
+          "
+        >
+          <a
+            (click)="goToNextOrPreviousPage('forward', searchForm.value.name)"
+            class="page-link"
+            aria-label="Next"
+          >
+            <span aria-hidden="true">Next &raquo;</span>
+          </a>
+        </li>
+      </ul>
+      <span style="text-align: end">
+        showing {{ noOfElementsPerPage }} from {{ totalElements }}</span
+      >
+    </nav>
+  </div>
+</div>
